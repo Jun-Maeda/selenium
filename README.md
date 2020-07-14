@@ -19,11 +19,13 @@ seleniumを使ってgoogle chrome のシークレットモードでスクレイ�
 # Usage
 
 chrome driverを使用しているgoogle chromeのバージョンに合わせてインストールする。
-sele.pyを実行する。
+start.pyを実行する。
+
+shops.csvに調べたい店舗名（マイビジネス名）と調べたい検索ワードを３つ設定する。
 
 ```bash
 git clone https://github.com/Jun-Maeda/movie_api.git
-python sele.py
+python start.py
 ```
 
 
