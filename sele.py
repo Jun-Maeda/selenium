@@ -3,7 +3,7 @@ from selenium import webdriver         # Webブラウザを自動操作する（
 import chromedriver_binary             # パスを通すためのコード
 from selenium.webdriver.chrome.options import Options # オプションを使うためのコード
 import pandas as pd
-
+import datetime
 
 
 
@@ -41,8 +41,7 @@ def selen(shop_name,keyw):
             if shop_name in shop:
                 for o in range(len(shop)):
                     if shop[o] == shop_name:
-                        print(f"{page}ページ")
-                        print(f"{o+1}番目")
+                        result = f"{page}ページ " + f"{o+1}番目"
                         count = False
                 break
             #ない場合
@@ -59,10 +58,10 @@ def selen(shop_name,keyw):
                 urls = link
                 
     except:
-        print("なし")
-
-    
+        result = "なし"
+ 
     driver.quit()
+    return result
 
     
     
@@ -94,13 +93,34 @@ def shop_keys():
         
         keywds = [keywd1,keywd2,keywd3]
         
+#        キーワード検索の結果をまとめるための変数
+        ranks = []
+
+    
 #        スクレイピングする
         for n in keywds:
-            selen(name,n)
+            rank = selen(name,n)
+            ranks.append(rank)
+        
+        today = datetime.datetime.today().strftime("%Y/%m/%d/")#フォーマットの指定
+        
+##        pandasDataframeを作成
+#        list_df = pd.DataFrame(columns=["日付","キーワード１","キーワード２","キーワード３"])
+##        データに挿入する中身を作成
+#        tmp_se = pd.Series([today,ranks[0],ranks[1],ranks[2]], index=list_df.columns)
+##        作成したデータを挿入
+#        list_df = list_df.append(tmp_se, ignore_index=True)
+        list_df = pd.DataFrame([today,ranks[0],ranks[1],ranks[2]])
+        list_df.index = ["日付","キーワード１","キーワード２","キーワード３"]
+        
+#        indexとcolumnを入れ替えて追記で出力
+        list_df.T.to_csv(name + ".csv", mode='a',encoding="utf_8_sig",index=False)
+        
+#        ranksを空に戻す
+        ranks = []
 
 
 
-if __name__ == "__main__":
     
 
 
