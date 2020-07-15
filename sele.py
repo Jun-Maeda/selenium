@@ -104,16 +104,11 @@ def shop_keys():
         
         today = datetime.datetime.today().strftime("%Y/%m/%d/")#フォーマットの指定
         
-##        pandasDataframeを作成
-#        list_df = pd.DataFrame(columns=["日付","キーワード１","キーワード２","キーワード３"])
-##        データに挿入する中身を作成
-#        tmp_se = pd.Series([today,ranks[0],ranks[1],ranks[2]], index=list_df.columns)
-##        作成したデータを挿入
-#        list_df = list_df.append(tmp_se, ignore_index=True)
         list_df = pd.DataFrame([today,ranks[0],ranks[1],ranks[2]])
         list_df.index = ["日付","キーワード１","キーワード２","キーワード３"]
         
 #        indexとcolumnを入れ替えて追記で出力
+#        indexの0を消すためにはここにindex=Falseを入れる
         list_df.T.to_csv(name + ".csv", mode='a',encoding="utf_8_sig",index=False)
         
 #        ranksを空に戻す
