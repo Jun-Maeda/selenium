@@ -4,7 +4,8 @@ import chromedriver_binary             # パスを通すためのコード
 from selenium.webdriver.chrome.options import Options # オプションを使うためのコード
 import pandas as pd
 import datetime
-
+import os
+import csv
 
 
 
@@ -102,21 +103,54 @@ def shop_keys():
             rank = selen(name,n)
             ranks.append(rank)
         
-        today = datetime.datetime.today().strftime("%Y/%m/%d/")#フォーマットの指定
-        
-        list_df = pd.DataFrame([today,ranks[0],ranks[1],ranks[2]])
-        list_df.index = ["日付","キーワード１","キーワード２","キーワード３"]
-        
-#        indexとcolumnを入れ替えて追記で出力
-#        indexの0を消すためにはここにindex=Falseを入れる
-        list_df.T.to_csv(name + ".csv", mode='a',encoding="utf_8_sig",index=False)
-        
+#        本日の日付を取得
+        today = datetime.datetime.today().strftime("%Y/%m/%d")#フォーマットの指定
+#        保存するファイル名
+        memory_file = name + ".csv"    
+#        ファイル存在確認     
+        file_check = os.path.isfile(memory_file)
+    
+#    ファイルが存在すれば上書き、なければ新規作成
+        if file_check:
+            list_csv = [today,ranks[0],ranks[1],ranks[2]]
+            with open(memory_file, "a", encoding="utf_8_sig") as f:
+                writer = csv.writer(f)
+                writer.writerow(list_csv)
+        else:
+            list_df = pd.DataFrame([today,ranks[0],ranks[1],ranks[2]])
+            list_df.index = ["日付","キーワード１","キーワード２","キーワード３"]
+
+    #        indexとcolumnを入れ替えて追記で出力
+    #        indexの0を消すためにはここにindex=Falseを入れる
+            list_df.T.to_csv(memory_file, mode='a',encoding="utf_8_sig",index=False)
+
 #        ranksを空に戻す
         ranks = []
 
-
-
     
 
+def test():
+    today = datetime.datetime.today().strftime("%Y/%m/%d")#フォーマットの指定
+    ranks = ["あいうえお","かきくけこ","さしすせそ"]
+    memory_file = "・ＭＰＭ・.csv"
+    file_check = os.path.isfile(memory_file)
+    if file_check:
+        list_csv = [today,ranks[0],ranks[1],ranks[2]]
+        with open(memory_file, "a", encoding="utf_8_sig") as f:
+            writer = csv.writer(f)
+            writer.writerow(list_csv)
+    else:
+        list_df = pd.DataFrame([today,ranks[0],ranks[1],ranks[2]])
+        list_df.index = ["日付","キーワード１","キーワード２","キーワード３"]
+
+#        indexとcolumnを入れ替えて追記で出力
+#        indexの0を消すためにはここにindex=Falseを入れる
+        list_df.T.to_csv(memory_file, mode='w',encoding="utf_8_sig",index=False)
+    
+
+    
+if __name__ == "__main__":
+    test()
+    
 
     
